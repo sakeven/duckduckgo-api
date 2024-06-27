@@ -24,20 +24,21 @@
    ![](https://files.catbox.moe/qckos0.png)
 1. 选择 `Import Git Repository`
    ![](https://files.catbox.moe/pqub9q.png)
-1. 选择 root 并将所有内容保持不变，并且只需添加名为 PAT_1 的环境变量（如图所示），其中将包含一个个人访问令牌（PAT），你可以在[这里](https://github.com/settings/tokens/new)轻松创建（保留默认，并且只需要命名下，名字随便）
+1. 选择 root 并将所有内容保持不变，并且只需添加名为 AUTH_TOKEN 的环境变量（如图所示），其中将包含一个个人访问令牌（PAT），你可以在[这里](https://github.com/settings/tokens/new)轻松创建（保留默认，并且只需要命名下，名字随便）
    ![](https://files.catbox.moe/0ez4g7.png)
 1. 点击 deploy，这就完成了，查看你的域名就可使用 API 了！
 
 </details>
 
 ## Self host
-###use docker
+### use docker
 
 ```
-docker run -p 8000:8000 binjie09/duckduckgo-api
+docker build -t duckduckgo-api .
+docker run -p 8000:8000 -e "AUTH_TOKEN=xxxx" duckduckgo-api
 ```
 
-then get `http://localhost:8000/search?q=啊对对对是什么梗&max_results=3`
+then get `curl -H "Authorization: Bearer xxxx" http://localhost:8000/search?q=啊对对对是什么梗&max_results=3`
 ```json
 [
     {
@@ -59,8 +60,9 @@ then get `http://localhost:8000/search?q=啊对对对是什么梗&max_results=3`
 ```
 ### self host
 ```bash
-git clone https://github.com/binjie09/duckduckgo-api.git
+git clone https://github.com/sakeven/duckduckgo-api.git
 cd duckduckgo-api
 python3 -m venv myenv && source myenv/bin/activate && pip install -r requirements.txt
+export AUTH_TOKEN=xxxx
 gunicorn -b 0.0.0.0:8000 app:app
 ```
